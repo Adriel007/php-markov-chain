@@ -23,22 +23,12 @@ p {
     font-size: large;
 }
 
-div {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: fit-content;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    margin-top: 10%;
-}
-
-div img {
-    height: 400px;
-    border: solid 3px #fff;
-    padding: 0;
-    border-radius: 10px;
-    margin: 5px;
+code {
+    font-size: large;
+    border-radius: 15px;
+    background-color: #000;
+    padding: 10px;
+    margin: 20px;
 }
 
 h4 {

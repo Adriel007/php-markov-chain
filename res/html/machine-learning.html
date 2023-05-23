@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <link rel="stylesheet" href="../css/machine-learning.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.00">
+</head>
+
+<body>
+    <p>
+        Para gerar texto com base em uma coleção de textos, primeiro contaremos todas as palavras que aparecem na
+        coleção. Depois, para cada palavra armazenaremos as palavras que subsequentes dessa. Exemplo:
+    </p>
+    <code>
+        "Esse é um exemplo de texto."<br>
+        Número de palavras: 6<br>
+        Armazenando (palavra, palavra subsequente):<br>
+        [(Esse, é),(é, um),(um, exemplo),(exemplo, de),(de, texto.)]
+    </code>
+    <p>
+        Para testar o algoritmo, precisamos de uma coleção de texto. Quanto mais texto sobre o mesmo assunto, melhor.
+        Além disso, o ideal é que os textos apresentem “similaridade” entre si. Nada melhor do que a prática para
+        entendermos esses detalhes.
+    </p>
+    <p>
+        Similaridade está entre aspas por que não se trata de similaridade semantica e sim de temas semelhantes. Não
+        adianta juntarmos textos sobre Impressoras e Jardins e esperar que geraremos algo que faça o mínimo de sentido
+        (Teste, vale a pena).
+    </p>
+
+    <h4>Fontes:</h4>
+    <cite>
+        https://medium.com/botsbrasil/gerando-texto-com-cadeias-de-markov-usando-python-313e67a0e713
+    </cite>
+</body>
+
+</html>
