@@ -4,7 +4,7 @@
 <head>
     <link rel="icon" href="#" type="image/extension" sizes="16x16">
     <link rel="stylesheet" href="res/css/styles.css">
-    <script defer src="#"></script>
+    <script defer src="res/javascript/scripts.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.00">
     <meta name="theme-color" content="#000">
