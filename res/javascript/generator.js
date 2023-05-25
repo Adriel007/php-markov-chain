@@ -1,7 +1,7 @@
 function send() {
     const texts = document.querySelectorAll("div textarea");
     const result = document.querySelector("textarea[readonly]");
-    const level = document.querySelector("input").value;
+    const level = document.getElementById("coherence").value;
     let str = "";
 
     texts.forEach(text => str += text.value + "@separatorphp@");
@@ -42,9 +42,16 @@ function removeTextArea() {
         textarea[textarea.length - 1].remove();
 }
 
-function range() {
+function range(id) {
     const coherence = document.getElementById("coherence");
     const creative = document.getElementById("creative");
 
-    creative.value = 10 - coherence.value;
+    switch (id) {
+        case "coherence":
+            creative.value = 10 - coherence.value;
+            break;
+        case "creative":
+            coherence.value = 10 - creative.value;
+            break;
+    }
 }
