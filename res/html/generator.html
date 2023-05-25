@@ -15,7 +15,8 @@
         <textarea placeholder="Insira seu texto aqui..."></textarea>
     </div>
     <textarea readonly placeholder="Resultado"></textarea>
-    <input type="number" placeholder="Nivel de coerência">
+    <input type="range" min="1" max="10" value="5" id="coherence" oninput="range()">
+    <input type="range" min="1" max="10" value="5" id="creative" oninput="range()">
     <button onclick="newTextArea()">Adicionar caixa de texto</button>
     <button onclick="removeTextArea()">Remover caixa de texto</button>
     <button onclick="send()">Enviar</button>

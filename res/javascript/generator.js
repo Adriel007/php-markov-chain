@@ -41,3 +41,10 @@ function removeTextArea() {
     if (textarea.length > 0)
         textarea[textarea.length - 1].remove();
 }
+
+function range() {
+    const coherence = document.getElementById("coherence");
+    const creative = document.getElementById("creative");
+
+    creative.value = 10 - coherence.value;
+}
