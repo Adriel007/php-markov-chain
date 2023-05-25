@@ -1,6 +1,6 @@
 // iframe bug solve
 const iframe = document.querySelector("iframe");
-iframe.src = "res/html/homepage.html?rnd" + Math.random();
+iframe.src = "res/html/homepage.html?rnd=" + (new Date()).getTime() + Math.floor(Math.random() * 1000000);
 
 // Click Event
 const a = document.querySelectorAll("header nav a");
