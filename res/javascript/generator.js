@@ -1,5 +1,7 @@
 function send() {
-    const texts = document.querySelectorAll("textarea");
+    const texts = document.querySelectorAll("div textarea");
+    const result = document.querySelector("textarea[readonly]");
+    const level = document.querySelector("input").value;
     let str = "";
 
     texts.forEach(text => str += text.value + "@separatorphp@");
@@ -10,15 +12,15 @@ function send() {
     const formData = new FormData();
     formData.append('file', file);
 
-    formData.append('level', level = 2);
+    formData.append('level', level);
     fetch('../php/scripts.php', {
         method: 'POST',
         body: formData
     })
         .then(response => response.json())
-        .then(data => {
-            console.log(data);
-        })
+        .then(data =>
+            result.value = data.result
+        )
         .catch(error => {
             console.error('Erro:', error);
         });
@@ -26,6 +28,16 @@ function send() {
 
 function newTextArea() {
     const textarea = document.createElement("textarea");
+    const container = document.querySelector("div");
 
-    document.body.appendChild(textarea);
+    textarea.classList.add("optional");
+    textarea.placeholder = "Insira seu texto aqui...";
+    container.appendChild(textarea);
+}
+
+function removeTextArea() {
+    const textarea = document.getElementsByClassName("optional");
+
+    if (textarea.length > 0)
+        textarea[textarea.length - 1].remove();
 }

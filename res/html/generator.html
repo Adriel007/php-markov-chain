@@ -9,9 +9,14 @@
 </head>
 
 <body>
-    <textarea></textarea>
-    <textarea></textarea>
-    <button onclick="newTextArea()">Adicionar mais textos</button>
+    <div>
+        <textarea placeholder="Insira seu texto aqui..."></textarea>
+        <textarea placeholder="Insira seu texto aqui..."></textarea>
+    </div>
+    <textarea readonly placeholder="Resultado"></textarea>
+    <input type="number" placeholder="Nivel de coerência">
+    <button onclick="newTextArea()">Adicionar caixa de texto</button>
+    <button onclick="removeTextArea()">Remover caixa de texto</button>
     <button onclick="send()">Enviar</button>
 </body>
 

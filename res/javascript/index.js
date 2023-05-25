@@ -1,4 +1,6 @@
-// await fetch("res/php/scripts.php?level=5&group=love").then(res => res.json());
+// iframe bug solve
+const iframe = document.querySelector("iframe");
+iframe.src = "res/html/homepage.html?rnd" + Math.random();
 
 // Click Event
 const a = document.querySelectorAll("header nav a");
