@@ -15,6 +15,10 @@ body {
     color: #fff;
 }
 
+p {
+    margin: 10px 0 10px 0;
+}
+
 ul {
     margin: 10px;
     margin-left: 50px;
