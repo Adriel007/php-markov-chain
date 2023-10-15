@@ -26,6 +26,5 @@ function markov_chain($dataset, $level)
     $mkc = new MarkovChain($level); // 1-2 low cohesion high creativity, 3-4 medium cohesion medium creativity, 5+ high cohesion low creativity
     $mkc->train($dataset);
     $arr['markov'] = $mkc->generateText(200);
-    $arr['score'] = $mkc->scoreGeneratedText($arr['markov']);
     return $arr;
 }

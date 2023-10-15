@@ -1,5 +1,4 @@
 <?php
-
 class MarkovChain
 {
     private $order;
@@ -8,6 +7,7 @@ class MarkovChain
     public function __construct($order)
     {
         $this->order = $order;
+        $this->emissionMatrix = array();
         $this->transitionMatrix = array();
     }
 
@@ -48,31 +48,6 @@ class MarkovChain
             }
         }
 
-        $learningRate = 0.01; // Taxa de aprendizado
-        $numIterations = 100; // Número de iterações do Gradiente Descendente
-
-        for ($iteration = 0; $iteration < $numIterations; $iteration++) {
-            $gradient = array(); // Gradiente dos pesos
-
-            foreach ($this->transitionMatrix as $currentState => $nextStates) {
-                foreach ($nextStates as $nextState => $prob) {
-                    $predictedProb = $this->calculateTransitionScore($currentState, $nextState);
-                    $expectedProb = $prob; // Probabilidade esperada
-
-                    // Gradiente Descendente: calcula a derivada do erro em relação ao peso
-                    $gradient[$currentState][$nextState] = ($predictedProb - $expectedProb) * $predictedProb * (1 - $predictedProb);
-                }
-            }
-
-            // Atualiza os pesos usando o Gradiente Descendente
-            foreach ($this->transitionMatrix as $currentState => &$nextStates) {
-                foreach ($nextStates as $nextState => &$prob) {
-                    $prob -= $learningRate * $gradient[$currentState][$nextState];
-                }
-            }
-        }
-
-        $this->wittenBellSmooth();
     }
 
     public function generateText($length)
@@ -113,44 +88,24 @@ class MarkovChain
 
     private function clean($str)
     {
-        $str = strtolower($str);
-        $str = strtr($str, ['á' => 'a', 'à' => 'a', 'ã' => 'a', 'â' => 'a', 'ä' => 'a', 'Á' => 'A', 'À' => 'A', 'Ã' => 'A', 'Â' => 'A', 'Ä' => 'A', 'é' => 'e', 'è' => 'e', 'ê' => 'e', 'ë' => 'e', 'É' => 'E', 'È' => 'E', 'Ê' => 'E', 'Ë' => 'E', 'í' => 'i', 'ì' => 'i', 'î' => 'i', 'ï' => 'i', 'Í' => 'I', 'Ì' => 'I', 'Î' => 'I', 'Ï' => 'I', 'ó' => 'o', 'ò' => 'o', 'õ' => 'o', 'ô' => 'o', 'ö' => 'o', 'Ó' => 'O', 'Ò' => 'O', 'Õ' => 'O', 'Ô' => 'O', 'Ö' => 'O', 'ú' => 'u', 'ù' => 'u', 'û' => 'u', 'ü' => 'u', 'Ú' => 'U', 'Ù' => 'U', 'Û' => 'U', 'Ü' => 'U', 'ñ' => 'n', 'Ñ' => 'N']);
+        $str = mb_strtolower($str, 'UTF-8');
+
+        // Remover acentos
+        $str = preg_replace('/\p{M}/u', '', $str);
+
+        // Remover emojis
+        $str = preg_replace('/[\x{1F600}-\x{1F64F}]/u', '', $str);
+
+        // Remover links
+        $str = preg_replace('/https?:\/\/\S+/', '', $str);
+
+        // Remover menções com "#" ou "@"
+        $str = preg_replace('/[#@]\S+/', '', $str);
+
+        // Remover pontuações
+        $str = preg_replace('/[^\w\s]/u', '', $str);
+
         return $str;
-    }
-
-    // Método para calcular a pontuação de um estado de transição
-    private function calculateTransitionScore($currentState, $nextState)
-    {
-        if (isset($this->transitionMatrix[$currentState][$nextState])) {
-            return $this->transitionMatrix[$currentState][$nextState];
-        } else {
-            // Retornar uma pontuação baixa caso a transição não exista na matriz de transição
-            return 0.01;
-        }
-    }
-
-    // Método para pontuar a qualidade de um texto gerado
-    public function scoreGeneratedText($text)
-    {
-        $text = $this->clean($text);
-        $words = explode(' ', $text);
-        $numWords = count($words);
-        $numRealisticTransitions = 0;
-
-        for ($i = 0; $i < $numWords - 1; $i++) {
-            $currentState = $words[$i];
-            $nextState = $words[$i + 1];
-            $transitionScore = $this->calculateTransitionScore($currentState, $nextState);
-
-            if ($transitionScore > 0) {
-                $numRealisticTransitions++;
-            }
-        }
-
-        // Calcula a porcentagem de transições realistas em relação ao total de transições
-        $realismScore = ($numRealisticTransitions / ($numWords - 1)) * 100;
-
-        return round($realismScore, 2); // Retorna o nível de realismo como uma porcentagem com duas casas decimais
     }
 
     private function capitalizeText($text)
@@ -203,4 +158,34 @@ class MarkovChain
         }
     }
 
+    public function saveModel($filename)
+    {
+        $modelData = serialize($this);
+        file_put_contents($filename, $modelData);
+    }
+
+    public static function loadModel($filename)
+    {
+        $modelData = file_get_contents($filename);
+        return unserialize($modelData);
+    }
+
+    public function trainBatch($dataset, $batchSize = 10000, $saveModelFile)
+    {
+        $totalItems = count($dataset);
+        $numBatches = ceil($totalItems / $batchSize);
+
+        for ($batch = 0; $batch < $numBatches; $batch++) {
+            $start = $batch * $batchSize;
+            $currentDataset = array_slice($dataset, $start, $batchSize);
+
+            $this->train($currentDataset);
+
+            $this->saveModel($saveModelFile);
+
+            unset($currentDataset);
+            gc_collect_cycles();
+
+        }
+    }
 }
